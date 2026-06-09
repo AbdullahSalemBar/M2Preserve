@@ -8,6 +8,11 @@
  <a href="#m2preserve-annotation-interface">Annotation Interface</a> | <a href="#m2preserveeval-dataset">Dataset</a> | <a href="#paper">Paper</a>
 </p>
 
+<p align="center">
+  <img src="m2preserve-framework.png" alt="M2PRESERVE framework overview" width="900">
+</p>
+
+
 
 ---
 
