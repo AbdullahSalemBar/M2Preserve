@@ -21,13 +21,13 @@
 
 ---
 
-## M<sup>2</sup>PreserveEval Dataset
-The M<sup>2</sup>PreserveEval dataset will be hosted on Hugging Face:
+## M<sup>2</sup>PRESERVEEVAL Dataset
+The M<sup>2</sup>PRESERVEEVAL dataset will be hosted on Hugging Face:
 
 ```text
 https://huggingface.co/datasets/cardiffnlp/M2PreserveEval
 ```
-The dataset contains instance-level annotations for evaluating **meaning preservation in text simplification** using the M<sup>2</sup>Preserve framework. Each instance includes an original text, a simplified output, extracted key facts, alignment decisions, fine-grained annotation labels, and a final score.
+The dataset contains instance-level annotations for evaluating meaning preservation in text simplification using the M<sup>2</sup>PRESERVE framework. Each instance includes an original text, a simplified output, extracted key facts, alignment decisions, fine-grained annotation labels, and a final score.
 
 The dataset is organised into two JSONL files:
 
