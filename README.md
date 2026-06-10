@@ -18,6 +18,72 @@
 
 ## M<sup>2</sup>PRESERVE Annotation Interface
 
+The M<sup>2</sup>PRESERVE annotation interface provides a web-based implementation of the framework described in the paper. It is used to collect fine-grained human annotations through key-fact alignment, supporting the two evaluation dimensions of **Completeness** and **Faithfulness**.
+
+In **Completeness**, annotators check whether key facts extracted from the original text are preserved in the simplified text. In **Faithfulness**, annotators check whether key facts extracted from the simplified text are supported by the original text.
+
+The interface allows annotators to upload annotation instances, align key facts with supporting sentences, assign labels to unaligned facts, add optional comments, and download the completed annotations. Downloaded files can be re-uploaded later to resume annotation.
+
+**Live interface:**  
+https://abdullahsalembar.github.io/M2Preserve/
+
+**Source code:**  
+[`annotation-ui/`](./annotation-ui/)
+
+### Input Format
+
+The interface expects a JSON file containing an `instances` field. Each instance includes the original text, simplified text, system name, source information, key facts, and a `displayType` field.
+
+```json
+{
+  "instances": [
+    {
+      "id": "m2p_001",
+      "idx": 1,
+      "SystemName": "gemini-2.0-flash",
+      "orginal": "The Nile is the longest river in Africa. It flows through several countries, including Egypt and Sudan.",
+      "simplified": "[1] The Nile is a very long river in Africa.\n[2] It goes through Egypt and Sudan.",
+      "source": "example",
+      "displayType": "simplified",
+      "keyFacts": [
+        "The Nile is the longest river in Africa.",
+        "The Nile flows through several countries.",
+        "Egypt and Sudan are among the countries the Nile flows through."
+      ]
+    }
+  ]
+}
+```
+
+#### Input Fields
+
+| Field | Description |
+|---|---|
+| `id` | Unique identifier for the annotation instance. |
+| `idx` | Instance index. |
+| `SystemName` | Name of the simplification system that generated the simplified text. |
+| `original` | Original input text. |
+| `simplified` | Simplified output text. |
+| `source` | Source dataset or collection. |
+| `displayType` | Annotation mode. Use `simplified` for Completeness and `original` for Faithfulness. |
+| `keyFacts` | List of atomic key facts to be annotated. |
+
+#### `displayType`
+
+The `displayType` field controls which evaluation dimension is shown in the interface.
+
+| `displayType` | Evaluation dimension | Key facts extracted from | Text used for alignment |
+|---|---|---|---|
+| `simplified` | Completeness | Original text | Simplified text |
+| `original` | Faithfulness | Simplified text | Original text |
+
+Use `displayType: "simplified"` when annotators need to check whether key facts from the original text are preserved in the simplified text.
+
+Use `displayType: "original"` when annotators need to check whether key facts from the simplified text are supported by the original text.
+
+### Notes
+
+The interface runs fully in the browser and does not store annotations on a server. Annotators must save their progress by clicking **Save / Download** and keeping the downloaded JSON file.
 
 ---
 
