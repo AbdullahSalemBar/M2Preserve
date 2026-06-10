@@ -1,140 +1,116 @@
-import * as React from "react";
-import { cn } from "@/lib/utils";
+import * as React from "react"
+import { Drawer as DrawerPrimitive } from "vaul"
 
-type DrawerContextValue = {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-};
+import { cn } from "@/lib/utils"
 
-const DrawerContext = React.createContext<DrawerContextValue | null>(null);
+const Drawer = ({
+  shouldScaleBackground = true,
+  ...props
+}: React.ComponentProps<typeof DrawerPrimitive.Root>) => (
+  <DrawerPrimitive.Root
+    shouldScaleBackground={shouldScaleBackground}
+    {...props}
+  />
+)
+Drawer.displayName = "Drawer"
 
-function useDrawer() {
-  const context = React.useContext(DrawerContext);
-  if (!context) {
-    throw new Error("Drawer components must be used inside <Drawer>.");
-  }
-  return context;
-}
+const DrawerTrigger = DrawerPrimitive.Trigger
 
-export function Drawer({ children }: { children: React.ReactNode }) {
-  const [open, setOpen] = React.useState(false);
-  return (
-    <DrawerContext.Provider value={{ open, setOpen }}>
+const DrawerPortal = DrawerPrimitive.Portal
+
+const DrawerClose = DrawerPrimitive.Close
+
+const DrawerOverlay = React.forwardRef<
+  React.ElementRef<typeof DrawerPrimitive.Overlay>,
+  React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Overlay>
+>(({ className, ...props }, ref) => (
+  <DrawerPrimitive.Overlay
+    ref={ref}
+    className={cn("fixed inset-0 z-50 bg-black/80", className)}
+    {...props}
+  />
+))
+DrawerOverlay.displayName = DrawerPrimitive.Overlay.displayName
+
+const DrawerContent = React.forwardRef<
+  React.ElementRef<typeof DrawerPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content>
+>(({ className, children, ...props }, ref) => (
+  <DrawerPortal>
+    <DrawerOverlay />
+    <DrawerPrimitive.Content
+      ref={ref}
+      className={cn(
+        "fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] border bg-background",
+        className
+      )}
+      {...props}
+    >
+      <div className="mx-auto mt-4 h-2 w-[100px] rounded-full bg-muted" />
       {children}
-    </DrawerContext.Provider>
-  );
-}
+    </DrawerPrimitive.Content>
+  </DrawerPortal>
+))
+DrawerContent.displayName = "DrawerContent"
 
-export function DrawerTrigger({
-  children,
-  asChild,
-}: {
-  children: React.ReactElement;
-  asChild?: boolean;
-}) {
-  const { setOpen } = useDrawer();
-
-  if (asChild && React.isValidElement(children)) {
-    const child = children as React.ReactElement<any>;
-    return React.cloneElement(child, {
-      onClick: (event: React.MouseEvent) => {
-        child.props.onClick?.(event);
-        setOpen(true);
-      },
-    });
-  }
-
-  return (
-    <button type="button" onClick={() => setOpen(true)}>
-      {children}
-    </button>
-  );
-}
-
-export function DrawerClose({
-  children,
-  asChild,
-}: {
-  children: React.ReactElement;
-  asChild?: boolean;
-}) {
-  const { setOpen } = useDrawer();
-
-  if (asChild && React.isValidElement(children)) {
-    const child = children as React.ReactElement<any>;
-    return React.cloneElement(child, {
-      onClick: (event: React.MouseEvent) => {
-        child.props.onClick?.(event);
-        setOpen(false);
-      },
-    });
-  }
-
-  return (
-    <button type="button" onClick={() => setOpen(false)}>
-      {children}
-    </button>
-  );
-}
-
-export function DrawerContent({
-  children,
+const DrawerHeader = ({
   className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  const { open, setOpen } = useDrawer();
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
+  <div
+    className={cn("grid gap-1.5 p-4 text-center sm:text-left", className)}
+    {...props}
+  />
+)
+DrawerHeader.displayName = "DrawerHeader"
 
-  if (!open) return null;
-
-  return (
-    <div className="fixed inset-0 z-50">
-      <button
-        type="button"
-        aria-label="Close drawer"
-        className="absolute inset-0 bg-black/40"
-        onClick={() => setOpen(false)}
-      />
-      <div
-        className={cn(
-          "absolute inset-x-0 bottom-0 max-h-[90vh] overflow-y-auto rounded-t-2xl border bg-white p-6 shadow-lg",
-          className
-        )}
-      >
-        <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-slate-300" />
-        {children}
-      </div>
-    </div>
-  );
-}
-
-export function DrawerHeader({
-  children,
+const DrawerFooter = ({
   className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return <div className={cn("text-center sm:text-left", className)}>{children}</div>;
-}
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
+  <div
+    className={cn("mt-auto flex flex-col gap-2 p-4", className)}
+    {...props}
+  />
+)
+DrawerFooter.displayName = "DrawerFooter"
 
-export function DrawerTitle({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return <h2 className={cn("text-lg font-semibold", className)}>{children}</h2>;
-}
+const DrawerTitle = React.forwardRef<
+  React.ElementRef<typeof DrawerPrimitive.Title>,
+  React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Title>
+>(({ className, ...props }, ref) => (
+  <DrawerPrimitive.Title
+    ref={ref}
+    className={cn(
+      "text-lg font-semibold leading-none tracking-tight",
+      className
+    )}
+    {...props}
+  />
+))
+DrawerTitle.displayName = DrawerPrimitive.Title.displayName
 
-export function DrawerFooter({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return <div className={cn("mt-6 flex flex-col gap-2", className)}>{children}</div>;
+const DrawerDescription = React.forwardRef<
+  React.ElementRef<typeof DrawerPrimitive.Description>,
+  React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Description>
+>(({ className, ...props }, ref) => (
+  <DrawerPrimitive.Description
+    ref={ref}
+    className={cn("text-sm text-muted-foreground", className)}
+    {...props}
+  />
+))
+DrawerDescription.displayName = DrawerPrimitive.Description.displayName
+
+export {
+  Drawer,
+  DrawerPortal,
+  DrawerOverlay,
+  DrawerTrigger,
+  DrawerClose,
+  DrawerContent,
+  DrawerHeader,
+  DrawerFooter,
+  DrawerTitle,
+  DrawerDescription,
 }
