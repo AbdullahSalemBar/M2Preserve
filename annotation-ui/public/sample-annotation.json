@@ -1,0 +1,34 @@
+{
+  "instances": [
+    {
+      "id": "m2p_001_completeness",
+      "idx": 1,
+      "SystemName": "ExampleSystem",
+      "orginal": "The Nile is the longest river in Africa. It flows through several countries, including Egypt and Sudan. The river is an important source of water for agriculture.",
+      "simplified": "[1] The Nile is a very long river in Africa.\n[2] It goes through Egypt and Sudan.\n[3] People use its water for farming.",
+      "source": "example",
+      "displayType": "simplified",
+      "keyFacts": [
+        "The Nile is the longest river in Africa.",
+        "The Nile flows through several countries.",
+        "Egypt and Sudan are among the countries the Nile flows through.",
+        "The Nile is an important source of water for agriculture."
+      ]
+    },
+    {
+      "id": "m2p_002_faithfulness",
+      "idx": 2,
+      "SystemName": "ExampleSystem",
+      "orginal": "[1] Marie Curie was a scientist who studied radioactivity.\n[2] She won two Nobel Prizes.\n[3] Her research contributed to the development of medical X-rays.",
+      "simplified": "Marie Curie was a scientist who studied radioactivity. She won two Nobel Prizes and helped improve medical X-rays.",
+      "source": "example",
+      "displayType": "original",
+      "keyFacts": [
+        "Marie Curie was a scientist.",
+        "Marie Curie studied radioactivity.",
+        "Marie Curie won two Nobel Prizes.",
+        "Marie Curie helped improve medical X-rays."
+      ]
+    }
+  ]
+}
