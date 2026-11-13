@@ -4,9 +4,15 @@
   A multidimensional framework for evaluating meaning preservation in text simplification.
 </p>
 
+
+
 <p align="center">
- <a href="#m2preserve-annotation-interface">Annotation Interface</a> | <a href="#m2preserveeval-dataset">Dataset</a> | <a href="#paper">Paper</a>
+  <a href="#m2preserve-annotation-interface">Annotation Interface</a> |
+  <a href="#m2preserveeval-dataset">Dataset</a> |
+  <a href="#m2preserve-llm">M<sup>2</sup>PRESERVE-LLM</a> |
+  <a href="https://2026.inlgmeeting.org/static/proceedings/long/watermarked_pdfs/6.pdf">Paper</a>
 </p>
+
 
 <p align="center">
   <img src="m2preserve-framework.png" alt="M2PRESERVE framework overview" width="900">
@@ -149,9 +155,107 @@ The instances are sampled from the following sources:
 
 
 ---
+<a id="m2preserve-llm"></a>
+## M²PRESERVE-LLM
 
-## M<sup>2</sup>PRESERVE-LLM
+### Download the Folder
 
+Download the `M2Preserve_metric` folder, which contains the Python metric and prompt templates.
+
+Install the dependencies for your selected backend:
+
+```bash
+pip install openai
+pip install -U torch transformers accelerate
+```
+
+For API-based models, configure the corresponding API key:
+
+**Linux / macOS:**
+
+```bash
+export OPENAI_API_KEY="your-key"
+export OPENROUTER_API_KEY="your-key"
+```
+
+**Windows PowerShell:**
+
+```powershell
+$env:OPENAI_API_KEY = "your-key"
+$env:OPENROUTER_API_KEY = "your-key"
+```
+
+Only the key for the selected backend is required.
+
+### Usage
+
+```python
+from m2preserve_metric import M2Preserve_metric
+
+originals = ["Antibiotics kill bacteria.\nThey do not work against viruses."]
+simplifieds = ["Antibiotics kill bacteria."]
+
+original_facts = [[
+    "Antibiotics kill bacteria.",
+    "Antibiotics do not work against viruses."
+]]
+simplified_facts = [["Antibiotics kill bacteria."]]
+
+for dimension, facts in [("Completeness", original_facts),("Faithfulness", simplified_facts)]:
+    metric = M2Preserve_metric(
+        prompt=dimension,
+        model="gpt-4.1",
+        modeltype="OAI",
+       
+    )
+
+    scores, responses, operations = metric.compute_metric(
+        complex=originals,
+        simplified=simplifieds,
+        keyfacts=facts
+    )
+
+    print(dimension, scores, responses, operations)
+```
+
+**Inputs:** Sentence-segmented texts (`\n` or lists of sentences) and pre-extracted key facts from the original text (Completeness) or simplified text (Faithfulness).
+
+**Outputs:** Scores (0–100 or `None`), binary Connected responses, and operation labels.
+
+Example outputs:
+
+```python
+# Completeness
+scores = [50.0]
+responses = [[1, 0]]
+operations = [["Connected", "Bad Deletion"]]
+
+# Faithfulness
+scores = [100.0]
+responses = [[1]]
+operations = [["Connected"]]
+```
+
+If evaluation fails after all retries, the corresponding outputs are `None`, `[]`, and `[]`.
+
+### Parameters
+
+| Parameter | Description |
+|---|---|
+| `prompt` | `Completeness` or `Faithfulness` |
+| `model` | Model ID |
+| `modeltype` | `OAI` (OpenAI), `OR` (OpenRouter), or `HF` (Hugging Face) |
+| `max_retries=2` | Additional retries after the first attempt |
+
+
+
+
+**Supported Hugging Face models:**
+
+- `Qwen/Qwen3-4B-Instruct-2507`
+- `Qwen/Qwen3-4B-Thinking-2507`
+- `google/gemma-3-4b-it`
+- `microsoft/phi-4`
 
 ---
 
