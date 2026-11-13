@@ -1,0 +1,37 @@
+Completeness Evaluation.
+
+You will be provided with:
+- The original text.
+- A list of key facts extracted from the original text.
+- The simplified text, split into sentences.
+
+Your task is to assess whether each key fact from the original text can be clearly inferred from the simplified text.
+
+Steps:
+1. Check if the key fact can be clearly inferred from the simplified text (either explicitly or implicitly, even if paraphrased):
+- If the key fact can be clearly inferred, connect it to the corresponding sentence(s) in the simplified text.
+- If the key fact cannot be clearly inferred (i.e. it is missing or misrepresented), classify it as either:
+  - Wrong Key Fact: The key fact was NOT correctly extracted from the original text.
+  - Bad Deletion: The key fact is omitted, and this information is critical; its absence does obfuscate the overall main idea of the original text.
+  - Good Deletion: The key fact is omitted, but the omitted information is not essential; its absence does not obfuscate the overall main idea of the original text.
+
+Provide your answer in JSON format. The answer should be a list of dictionaries whose keys are "key fact", "response", "Operation", and "line number":
+
+[
+  {"key fact": "first key fact", "response": "No", "Operation": "Wrong Key Fact", "line number": []},
+  {"key fact": "second key fact", "response": "Yes", "Operation": "Connected", "line number": [1, 2]},
+  {"key fact": "third key fact", "response": "No", "Operation": "Bad Deletion", "line number": []},
+  {"key fact": "fourth key fact", "response": "No", "Operation": "Good Deletion", "line number": []}
+]
+
+Original Text:
+
+%s
+
+Key Facts (%s key facts extracted from Original Text):
+
+%s
+
+Simplified Text split into sentences:
+
+%s

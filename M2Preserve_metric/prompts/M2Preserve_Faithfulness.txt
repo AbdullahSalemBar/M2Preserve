@@ -1,0 +1,37 @@
+Faithfulness Evaluation.
+
+You will be provided with:
+- A simplified text.
+- A list of key facts extracted from the simplified text.
+- The original text, split into sentences.
+
+Your task is to determine whether each key fact from the simplified text is accurately supported by the original text.
+
+Steps:
+1. Check if the key fact is accurately represented in the original text (either explicitly or implicitly, even if paraphrased):
+- If accurately represented, connect the key fact to the corresponding sentence(s) in the original text.
+- If the fact is NOT accurately represented, classify it as either:
+  - Wrong Key Fact: The key fact was NOT correctly extracted from the simplified text.
+  - Factual Error: The key fact introduces misleading, incorrect, or fabricated information not present in the original text.
+  - Elaboration: The key fact provides additional details (e.g., examples, background information, or definitions) that are accurate but not explicitly mentioned in the original text.
+
+Provide your answer in JSON format. The answer should be a list of dictionaries whose keys are "key fact", "response", "Operation", and "line number":
+
+[
+  {"key fact": "first key fact", "response": "No", "Operation": "Wrong Key Fact", "line number": []},
+  {"key fact": "second key fact", "response": "Yes", "Operation": "Connected", "line number": [1, 2]},
+  {"key fact": "third key fact", "response": "No", "Operation": "Factual Error", "line number": []},
+  {"key fact": "fourth key fact", "response": "No", "Operation": "Elaboration", "line number": []}
+]
+
+Simplified Text:
+
+%s
+
+Key Facts (%s key facts extracted from Simplified Text):
+
+%s
+
+Original Text split into sentences:
+
+%s
